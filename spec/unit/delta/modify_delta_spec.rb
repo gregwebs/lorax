@@ -24,34 +24,59 @@ describe Lorax::ModifyDelta do
   describe "#apply!" do
     context "element node" do
       context "when attributes differ" do
-        it "should set the attributes properly" do
+        before do
           doc1 = xml { root { a1(:foo => :bar) } }
           doc2 = xml { root { a1(:bazz => :quux, :once => :twice) } }
-          doc3 = doc1.dup
           node1 = doc1.at_css("a1")
           node2 = doc2.at_css("a1")
-          node3 = doc3.at_css("a1")
+          @doc3 = doc1.dup
+          @node3 = @doc3.at_css("a1")
+          @delta = Lorax::ModifyDelta.new(node1, node2)
+        end
 
-          delta = Lorax::ModifyDelta.new(node1, node2)
-          delta.apply!(doc3)
+        it "should set the attributes properly" do
+          @delta.apply!(@doc3)
           
-          node3["foo"].should be_nil
-          node3["bazz"].should == "quux"
-          node3["once"].should == "twice"
+          @node3["foo"].should be_nil
+          @node3["bazz"].should == "quux"
+          @node3["once"].should == "twice"
+        end
+
+        it 'to_s shows attribute diff' do
+          @delta.to_s.should == <<-XML.chomp
+--- /root/a1
++++ /root/a1
+  <root>
+- <a1 foo=\"bar\"></a1>
++ <a1 once=\"twice\" bazz=\"quux\"></a1>
+  </root>
+XML
         end
       end
     end
 
     context "text node" do
+      before do
+        @doc1 = xml { root "hello" }
+        @doc2 = xml { root "goodbye" }
+        @delta = Lorax::ModifyDelta.new(@doc1.root.children.first, @doc2.root.children.first)
+      end
+
       it "should set the content properly" do
-        doc1 = xml { root "hello" }
-        doc2 = xml { root "goodbye" }
-        doc3 = doc1.dup
-
-        delta = Lorax::ModifyDelta.new(doc1.root.children.first, doc2.root.children.first)
-        delta.apply!(doc3)
-
+        doc3 = @doc1.dup
+        @delta.apply!(doc3)
         doc3.root.content.should == "goodbye"
+      end
+
+      it 'to_s shows attribute diff' do
+        @delta.to_s.should == <<-XML.chomp
+--- /root/text()
++++ /root/text()
+  <root>
+- hello
++ goodbye
+  </root>
+XML
       end
     end
 

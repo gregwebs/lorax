@@ -1,0 +1,22 @@
+<edtr version="1" environment="test" request="" where="version_xml_builder">
+  <client type="4" vsn="3" usb="" id="2"/>
+  <parent type="2" vsn="eDTRMasterServer" id="1"/>
+  <directory files="7" directories="4" obsolete="false" internal="false" size="3090" name="content">
+    <directory files="1" directories="0" obsolete="false" internal="false" size="0" name="catalog">
+      <file sha="" obsolete="false" date="Tue Jan 25 00:08:00 UTC 2011" internal="false" size="0" name="NSFST" label="AB-02-173" url="http://localhost:3000/assets/11/download"/>
+    </directory>
+    <directory files="0" directories="0" obsolete="false" internal="false" size="0" name="javascripts">
+    </directory>
+    <directory files="0" directories="0" obsolete="false" internal="false" size="0" name="stylesheets">
+    </directory>
+    <directory files="0" directories="0" obsolete="false" internal="false" size="0" name="images">
+    </directory>
+    <file sha="846f4f42ab915f085cc9b95787c126f5d895790bca8415626388e08449b6dc02" obsolete="false" date="Tue Jan 25 00:08:00 UTC 2011" internal="false" size="11" name="autorun.inf" label="autorun" url="http://localhost:3000/assets/1/download"/>
+    <file sha="" obsolete="false" date="Tue Jan 25 00:08:02 UTC 2011" internal="false" size="3079" name="index.xml" label="index" url="http://localhost:3000/assets/13/download"/>
+  </directory>
+  <directory files="0" directories="0" obsolete="false" internal="false" size="0" name="lib">
+  </directory>
+  <directory files="1" directories="0" obsolete="false" internal="false" size="341" name="configuration">
+    <file sha="" obsolete="false" date="Tue Jan 25 00:08:02 UTC 2011" internal="false" size="341" name="distributors.xml" label="distributors" url="http://localhost:3000/assets/14/download"/>
+  </directory>
+</edtr>

@@ -127,4 +127,18 @@ describe Lorax do
     end
   end
 
+  context "a document with just a root attribute changed" do
+    it 'a diff should just show the attribute change' do
+      diff = Lorax.diff(*['edtr1', 'edtr2'].map do |file|
+        Nokogiri::XML(
+          File.read(File.join(File.dirname(__FILE__), '..', 'files', file))
+        )
+      end)
+
+      # below is the xmldiff output- just the changed attribute
+      diff.to_s.should == <<-XML.chomp
+[update, /edtr[1]/@where, version_xml_builder]
+XML
+    end
+  end
 end
