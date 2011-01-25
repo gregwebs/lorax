@@ -94,13 +94,18 @@ describe Lorax::InsertDelta do
     context "delta with unresolvable xpath" do
       it "should raise a Conflict exception" do
         doc1 = xml { root }
-        doc2 = xml { root { a1 } }
-        node = doc2.at_css("a1")
-        delta = Lorax::InsertDelta.new node, "/foo/bar/quux", 0
+        delta, _ = insert_delta_one_node
 
         proc { delta.apply!(doc1) }.should raise_error(Lorax::Delta::NodeNotFoundError)
       end
     end
+  end
+
+  def insert_delta_one_node
+    doc = xml { root { a1 } }
+    node = doc.at_css("a1")
+    delta = Lorax::InsertDelta.new node, "/foo/bar/quux", 0
+    [delta, doc, node]
   end
 
   describe "#descriptor" do
@@ -108,6 +113,15 @@ describe Lorax::InsertDelta do
   end
 
   describe "#to_s" do
-    it "needs a spec"
+    it "display a patch" do
+      delta, _ = insert_delta_one_node
+      delta.to_s.should == <<-XML.chomp
+---
++++ /root/a1
+  <root>
++ <a1></a1>
+  </root>
+XML
+    end
   end
 end

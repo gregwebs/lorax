@@ -72,15 +72,7 @@ describe Lorax::ModifyDelta do
       end
 
       it "should move the node to the correct position" do
-        doc1 = xml { root {
-            a1 { b2 }
-            a2 { b1 ; b3 }
-          } }
-        doc2 = xml { root {
-            a1
-            a2 { b1 ; b2 ; b3 }
-          } }
-        delta = Lorax::ModifyDelta.new(doc1.at_css("b2"), doc2.at_css("b2"))
+        delta, doc1, doc2 = modified_tree
         doc3 = doc1.dup
         delta.apply!(doc3)
         doc3.at_xpath("/root/a2/*[2]").name.should == "b2"
@@ -88,11 +80,34 @@ describe Lorax::ModifyDelta do
     end
   end
 
+  def modified_tree
+    doc1 = xml { root {
+        a1 { b2 }
+        a2 { b1 ; b3 }
+      } }
+    doc2 = xml { root {
+        a1
+        a2 { b1 ; b2 ; b3 }
+      } }
+    delta = Lorax::ModifyDelta.new(doc1.at_css("b2"), doc2.at_css("b2"))
+    [delta, doc1, doc2]
+  end
+
   describe "#descriptor" do
     it "needs a spec"
   end
 
   describe "#to_s" do
-    it "needs a spec"
+    it "display a patch" do
+      delta, _ = modified_tree
+      delta.to_s.should == <<-XML.chomp
+--- /root/a1/b2
++++ /root/a2/b2
+  <b1/>
+- <b2></b2>
++ <b2></b2>
+  <b3/>
+XML
+    end
   end
 end

@@ -31,17 +31,19 @@ describe Lorax::DeleteDelta do
 
     context "for a subtree delta" do
       it "should delete the subtree" do
-        doc1 = xml { root { a1 { b1 ; b2 "hello" } } }
-        doc2 = xml { root }
-        node = doc1.at_css("a1")
-        delta = Lorax::DeleteDelta.new node
-
+        delta, doc1, node = subtree_delta
         delta.apply!(doc1)
-
         doc1.at_css("a1,b1,b2").should be_nil
         node.parent.should == nil
       end
     end
+  end
+
+  def subtree_delta
+    doc = xml { root { a1 { b1 ; b2 "hello" } } }
+    node = doc.at_css("a1")
+    delta = Lorax::DeleteDelta.new node
+    [delta, doc, node]
   end
 
   describe "#descriptor" do
@@ -49,6 +51,15 @@ describe Lorax::DeleteDelta do
   end
 
   describe "#to_s" do
-    it "needs a spec"
+    it "display a patch" do
+      delta, _ = subtree_delta
+      delta.to_s.should == <<-XML.chomp
+--- /root/a1
++++
+  <root>
+- <a1><b1></b1><b2>hello</b2></a1>
+  </root>
+XML
+    end
   end
 end
