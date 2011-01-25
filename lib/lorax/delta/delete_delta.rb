@@ -17,13 +17,7 @@ module Lorax
     end
 
     def to_s
-      response = []
-      response << "--- #{node.path}"
-      response << "+++"
-      response << context_before(node)
-      response << node.to_html.gsub(/^/,'- ').strip
-      response << context_after(node)
-      response.join("\n")
+      super node, nil
     end
   end
 end

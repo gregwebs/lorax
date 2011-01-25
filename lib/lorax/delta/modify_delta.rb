@@ -42,16 +42,7 @@ module Lorax
     end
 
     def to_s
-      response = []
-      response << "--- #{node1.path}"
-      response << "+++ #{node2.path}"
-      response << context_before(node2)
-
-      response << node1.to_html.gsub(/^/,'- ').strip
-      response << node2.to_html.gsub(/^/,'+ ').strip
-
-      response << context_after(node2)
-      response.join("\n")
+      super node1, node2
     end
 
     private

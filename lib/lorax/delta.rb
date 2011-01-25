@@ -36,6 +36,19 @@ module Lorax
         "  </#{node.parent.name}>"
       end
     end
+
+    def to_s(node1, node2)
+      [
+        "---" + (node1 ? " #{node1.path}" : ""),
+        "+++" + (node2 ? " #{node2.path}" : ""),
+        context_before(node2 || node1),
+        [
+          node1 && node1.to_html.gsub(/^/,'- ').strip,
+          node2 && node2.to_html.gsub(/^/,'+ ').strip
+        ].compact.join("\n"),
+        context_after(node2 || node1),
+      ].join("\n")
+    end
   end
 end
 
