@@ -6,6 +6,8 @@ module Lorax
       @deltas = []
     end
 
+    def empty?; @deltas.empty? end
+
     def add(delta)
       @deltas << delta
     end
